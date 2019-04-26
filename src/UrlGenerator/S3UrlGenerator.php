@@ -68,7 +68,14 @@ class S3UrlGenerator extends BaseUrlGenerator
      * @return string
      */
     public function getResponsiveImagesDirectoryUrl(): string
-    {
-        return config('medialibrary.s3.domain').'/'.$this->pathGenerator->getPathForResponsiveImages($this->media);
+    {	  
+        $this->pathGenerator->getPathForResponsiveImages($this->media);
+        
+        if ($root = config('filesystems.disks.'.$this->media->disk.'.root')) {
+            $url = $root.'/'.$url;
+        }
+
+        return config('medialibrary.s3.domain').'/'.$url;
     }
+    
 }
